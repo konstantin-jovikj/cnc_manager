@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('pages.home');
-});
+// Route::get('/', function () {
+//     return view('pages.home');
+// });
+
+Route::get('/programs', [Controller::class, 'programs'])->name('programs');
+Route::get('/tools', [Controller::class, 'tools'])->name('tools');
+Route::get('/', [Controller::class, 'home'])->name('home');
