@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('tools', function (Blueprint $table) {
             $table->id();
+            $table->string('position')->nullable();
+            $table->string('station')->nullable();
+            $table->string('shape')->nullable();
+            $table->string('dimension')->nullable();
+            $table->string('tool_drawing')->nullable();
             $table->timestamps();
         });
     }

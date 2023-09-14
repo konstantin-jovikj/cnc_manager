@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('shapes', function (Blueprint $table) {
             $table->id();
+            $table->string('shape')->nullable();
             $table->timestamps();
         });
     }

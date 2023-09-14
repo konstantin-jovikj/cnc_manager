@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('programs', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
+            $table->text('program')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }
