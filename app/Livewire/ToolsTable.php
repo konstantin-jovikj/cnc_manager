@@ -9,10 +9,16 @@ use Livewire\WithPagination;
 class ToolsTable extends Component
 {
     use WithPagination;
+
+    // public $perPage = 10;
+    public $search = '';
+
     public function render()
     {
-        return view('livewire.tools-table',[
-            'tools' => Tool::paginate(10)
-        ]);
+        return view('livewire.tools-table',
+            [
+                'tools' => Tool::search($this->search)->get()
+            ]
+        );
     }
 }

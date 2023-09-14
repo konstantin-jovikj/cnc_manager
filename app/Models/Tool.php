@@ -14,4 +14,12 @@ class Tool extends Model
     {
         return $this->belongsToMany(Program::class, 'used_tools', 'tool_id', 'program_id');
     }
+
+    public function scopeSearch($query, $value)
+    {
+        $query->where('position', 'like', "%{$value}%")
+        ->orWhere('station', 'like', "%{$value}%")
+        ->orWhere('shape', 'like', "%{$value}%")
+        ->orWhere('dimension', 'like', "%{$value}%");
+    }
 }

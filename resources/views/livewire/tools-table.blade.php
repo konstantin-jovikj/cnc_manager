@@ -1,6 +1,30 @@
 <div class="container">
+    <div class="row">
+        <div class="col">
+
+        </div>
+    </div>
     <div class="row vh-100">
         <div class="col my-auto">
+            {{-- <div class="mb-4">
+                <label for="perPage">Per Page</label>
+                <select
+                    wire:model.live='perPage'
+                    class="" name="perPage" id="perPage">
+                    <option value="5">5</option>
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="15">15</option>
+                </select>
+            </div> --}}
+            <div class="form-floating mb-3">
+                <input
+                    wire:model.live.debounce.300ms="search"
+                    type="text"
+                    class="form-control" placeholder="Search Tools">
+                <label for="searchTools">Search Tools</label>
+            </div>
             <table class="table table-hover table-bordered border-primary">
                 <thead class="table-primary">
                     <tr>
@@ -35,9 +59,9 @@
                 </tbody>
             </table>
 
-            <div class="d-flex justify-content-center">
-                    {!! $tools->links('pagination::bootstrap-5') !!}
-            </div>
+            {{-- <div class="d-flex justify-content-center">
+                {!! $tools->links('pagination::bootstrap-5') !!}
+            </div> --}}
         </div>
     </div>
 </div>
