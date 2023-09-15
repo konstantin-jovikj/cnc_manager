@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Livewire;
+
+use App\Models\Tool;
+use App\Models\Shape;
+use App\Models\Station;
+use Livewire\Component;
+use App\Models\Position;
+use Livewire\Attributes\On;
+
+class EditTool extends Component
+{
+
+    protected $listeners = ['editTool' => 'editTool'];
+
+    // public $Id;
+    public $positions;
+    public $tool;
+    // public $shapes;
+    // public $stations;
+    // public $selectedPosition;
+    // public $Id;
+
+    // #[On('tool-selected')]
+    public function mount($tool)
+    {
+        // Call the getPosition method in the mount method to fetch the positions
+        $this->getPosition();
+        $this->tool = $tool;
+        // $this->Id = $toolId;
+
+
+    }
+
+    public function getPosition()
+    {
+        $this->positions = Position::all();
+    }
+
+
+
+    public function render()
+    {
+        return view('livewire.edit-tool',[
+            'positions' => Position::all(),
+            'shapes' => Shape::all(),
+            'stations' => Station::all()
+        ]);
+    }
+
+
+}

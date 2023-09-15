@@ -4,7 +4,7 @@
 
         </div>
     </div>
-    <div class="row vh-100">
+    <div class="row ">
         <div class="col my-auto">
             {{-- <div class="mb-4">
                 <label for="perPage">Per Page</label>
@@ -22,6 +22,7 @@
                 <input
                     wire:model.live.debounce.300ms="search"
                     type="text"
+                    id="searchTools"
                     class="form-control" placeholder="Search Tools">
                 <label for="searchTools">Search Tools</label>
             </div>
@@ -52,16 +53,19 @@
                         </td> --}}
                             <td>
                                 <a class="btn btn-info btn-sm" href="">View</a>
-                                <a class="btn btn-warning btn-sm" href="">Edit</a>
+                                <a href="{{route('edit.tool', $tool->id)}}" class="btn btn-warning btn-sm">Edit</a>
+
+
+
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
 
-            {{-- <div class="d-flex justify-content-center">
-                {!! $tools->links('pagination::bootstrap-5') !!}
-            </div> --}}
         </div>
     </div>
+
+
+
 </div>

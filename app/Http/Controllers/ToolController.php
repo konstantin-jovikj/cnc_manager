@@ -44,7 +44,7 @@ class ToolController extends Controller
      */
     public function edit(Tool $tool)
     {
-        //
+        return view('pages.edit_tool', compact('tool'));
     }
 
     /**

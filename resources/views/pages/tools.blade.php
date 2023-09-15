@@ -2,4 +2,5 @@
 @section('content')
 
     <livewire:tools-table/>
+
 @endsection

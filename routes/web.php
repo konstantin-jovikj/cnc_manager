@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ToolController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,3 +22,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/programs', [Controller::class, 'programs'])->name('programs');
 Route::get('/tools', [Controller::class, 'tools'])->name('tools');
 Route::get('/', [Controller::class, 'home'])->name('home');
+
+Route::get('/edit/tool/{tool}',[ToolController::class, 'edit'])->name('edit.tool');
