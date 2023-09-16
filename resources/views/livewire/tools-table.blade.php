@@ -54,9 +54,6 @@
                             <td>
                                 <a class="btn btn-info btn-sm" href="">View</a>
                                 <a href="{{route('edit.tool', $tool->id)}}" class="btn btn-warning btn-sm">Edit</a>
-
-
-
                             </td>
                         </tr>
                     @endforeach
