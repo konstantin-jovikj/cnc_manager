@@ -52,7 +52,7 @@
                             </div>
                         </td> --}}
                             <td>
-                                <a class="btn btn-info btn-sm" href="">View</a>
+                                <button wire:click="view({{ $tool->id }})" class="btn btn-info btn-sm" href="">View</button>
                                 <a href="{{route('edit.tool', $tool->id)}}" class="btn btn-warning btn-sm">Edit</a>
                             </td>
                         </tr>
@@ -60,6 +60,43 @@
                 </tbody>
             </table>
 
+        </div>
+    </div>
+
+    {{-- MODAL TEST --}}
+    <div>
+
+            @if ($isOpen)
+            <div class="modal show" tabindex="-1" role="dialog" style="display: block;">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-light">
+                            <h5 class="modal-title">
+                                Add Post
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form wire:submit="store">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Post Title</label>
+                                    <input type="text" class="form-control" id="title" placeholder="Enter post title">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="body" class="form-label">Post Body</label>
+                                    <textarea class="form-control" id="body" rows="4" placeholder="Enter post body"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    Save
+                                </button>
+                                <button wire:click="closeModal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-backdrop fade show"></div>
+            @endif
         </div>
     </div>
 
