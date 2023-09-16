@@ -52,7 +52,7 @@
                         <div class="col-6">
                             <div style="width: 100%" class="mx-auto my-auto">
                                 <img src="{{ asset('storage/images/' . $tool->tool_drawing) }}"
-                                    class="img-fluid  rounded " alt="tool{{ $tool->id }}img" </div>
+                                    class="img-fluid  rounded " alt="tool{{ $tool->id }}img" >
                             </div>
                         </div>
                     </div>

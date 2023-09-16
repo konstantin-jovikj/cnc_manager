@@ -22,4 +22,13 @@ class Tool extends Model
         ->orWhere('shape', 'like', "%{$value}%")
         ->orWhere('dimension', 'like', "%{$value}%");
     }
+
+    protected $fillable = [
+        'position',
+        'station',
+        'shape',
+        'dimension',
+        'tool_drawing',
+    ];
+
 }

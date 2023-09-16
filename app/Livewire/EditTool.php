@@ -15,16 +15,11 @@ class EditTool extends Component
 
     protected $listeners = ['editTool' => 'editTool'];
 
-    // public $Id;
+
     public $positions;
     public $tool;
-    public $shape;
-    public $station;
+
     public $selectedPosition;
-    public $position;
-    public $dimension;
-    public $drawing;
-    public $toolid;
     public $Id;
 
     // #[On('tool-selected')]
@@ -33,7 +28,6 @@ class EditTool extends Component
         // Call the getPosition method in the mount method to fetch the positions
         $this->getPosition();
         $this->tool = $tool;
-        // $this->Id = $toolId;
 
 
     }
@@ -41,21 +35,6 @@ class EditTool extends Component
     public function getPosition()
     {
         $this->positions = Position::all();
-    }
-
-    public function view($id)
-    {
-
-        $tool = Tool::findOrFail($id);
-        $this->toolid = $id;
-        $this->position = $tool->position;
-        $this->station = $tool->body;
-        $this->shape = $tool->shape;
-        $this->dimension = $tool->dimension;
-        $this->drawing = $tool->tool_drawing;
-
-        $this->openModal();
-
     }
 
 
