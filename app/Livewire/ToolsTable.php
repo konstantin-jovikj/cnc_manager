@@ -8,15 +8,19 @@ use App\Models\Station;
 use Livewire\Component;
 use App\Models\Position;
 use Livewire\WithPagination;
+use Livewire\Attributes\Rule;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class ToolsTable extends Component
 {
-    // use WithPagination;
 
-    // public $perPage = 10;
+    use WithFileUploads;
+
+
     public $search = '';
     public $selectedToolId;
-    // public $Id;
+
 
     public $tool;
     public $shape;
@@ -30,6 +34,8 @@ class ToolsTable extends Component
     public $stationEdit;
     public $positionEdit;
     public $dimensionEdit;
+
+    #[Rule('nullable|sometimes|image')]
     public $drawingEdit;
 
     public $tool_drawing;
@@ -38,6 +44,9 @@ class ToolsTable extends Component
     public $isOpen = 0;
     public $isEditOpen = 0;
 
+    public $isDeleteConfirmationOpen = 0;
+    public $toolIdToDelete;
+
 
     public function editTool($toolId)
     {
@@ -45,20 +54,6 @@ class ToolsTable extends Component
         $this->dispatch('tool-selected', id: $toolId);
     }
 
-        // VIEW
-    public function view($id)
-    {
-
-        $tool = Tool::findOrFail($id);
-        $this->toolid = $id;
-        $this->position = $tool->position;
-        $this->station = $tool->station;
-        $this->shape = $tool->shape;
-        $this->dimension = $tool->dimension;
-        $this->drawing = $tool->tool_drawing;
-
-        $this->openModal();
-    }
 
     public function openModal()
     {
@@ -70,6 +65,18 @@ class ToolsTable extends Component
         $this->isOpen = false;
     }
 
+
+    public function OpenDeleteConfirmation($id)
+    {
+
+        $this->toolIdToDelete = $id;
+        $this->isDeleteConfirmationOpen = true;
+    }
+
+    public function CloseDeleteConfirmation()
+    {
+        $this->isDeleteConfirmationOpen = false;
+    }
 
     // EDIT
 
@@ -104,19 +111,41 @@ class ToolsTable extends Component
     {
         if ($this->toolid) {
             $tool = Tool::findOrFail($this->toolid);
+
+            $filename = $tool->tool_drawing; // Default to the existing filename
+
+            if ($this->drawingEdit instanceof \Illuminate\Http\UploadedFile) {
+                $filename = $this->toolid . '.' . $this->drawingEdit->getClientOriginalExtension();
+                $this->drawingEdit->storeAs('public/images', $filename);
+            }
+
             $tool->update([
                 'position' => $this->positionEdit,
                 'station' => $this->stationEdit,
                 'shape' => $this->shapeEdit,
                 'dimension' => $this->dimensionEdit,
-                'tool_drawing' => $this->drawingEdit
+                'tool_drawing' => $filename
             ]);
+
             session()->flash('success', 'Tool updated successfully.');
             $this->closeEditModal();
-            $this->reset('position', 'station', 'shape', 'dimension', 'tool_drawing');
+            $this->reset('positionEdit', 'stationEdit', 'shapeEdit', 'dimensionEdit', 'drawingEdit');
         }
     }
 
+
+    public function delete()
+    {
+        if ($this->toolIdToDelete) {
+            $tool = Tool::findOrFail($this->toolIdToDelete);
+            $tool->delete();
+            session()->flash('success', 'The Tool was deleted Successfully!!');
+
+            // Reset the toolIdToDelete and close the modal
+            $this->toolIdToDelete = null;
+            $this->isDeleteConfirmationOpen = false;
+        }
+    }
 
 
 
