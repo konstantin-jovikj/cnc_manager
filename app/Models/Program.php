@@ -21,4 +21,6 @@ class Program extends Model
         return $this->belongsToMany(Tool::class, 'used_tools', 'program_id', 'tool_id');
     }
 
+
+
 }

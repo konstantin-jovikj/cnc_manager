@@ -39,8 +39,10 @@
                         <td>{{$program->created_at}}</td>
                         <td>{{$program->updated_at}}</td>
                         <td>
-                            <button class="btn btn-warning btn-sm">View /
-                                Edit</button>
+                            {{-- <button wire:click='openViewProgramModul({{$program->id}})' class="btn btn-success btn-sm">View</button> --}}
+                            <a href="{{route('view.program', $program->id)}}" class="btn btn-success btn-sm">View</a>
+
+                            <button class="btn btn-warning btn-sm">Edit</button>
                             <button class="btn btn-danger btn-sm">Delete</button>
                         </td>
                     </tr>
@@ -78,7 +80,7 @@
                                         <div class="row mt-2">
                                             @foreach ( $tools as $tool )
                                             <div class="col-3">
-                                                    <input wire:model='selectedTools' type="checkbox" class="btn-check bg-primary" id="btn-check-{{$tool->id}}"
+                                                    <input wire:model='toolUsed' type="checkbox" class="btn-check bg-primary" id="btn-check-{{$tool->id}}"
                                                     autocomplete="off" value="{{$tool->id}}">
                                                     <label class="btn btn-sm btn-outline-dark w-100 m-1" for="btn-check-{{$tool->id}}">{{ $tool->position}} - {{$tool->dimension}}</label>
                                             </div>
@@ -109,5 +111,54 @@
     </div>
 
     {{-- End of New Program Modal --}}
+
+
+
+      {{-- View Program Modal --}}
+      <div>
+        @if ($isViewOpen)
+            <div class="modal show" tabindex="-1" role="dialog" style="display: block;">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">View Program</h1>
+                            <button wire:click='closeViewProgramModul' type="button" class="btn-close"
+                                data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form wire:submit='saveProgram'>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="mb-3">
+                                            {{$viewProgramCode}}
+                                        </div>
+                                    </div>
+                                    <div class="col-8">
+                                            <h4>{{$viewProgramName}}</h4>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="mb-3">
+                                                    <label for="note" class="form-label">Notes</label>
+                                                    <textarea wire:model='note' class="form-control " id="note" rows="8"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-backdrop fade show"></div>
+        @endif
+    </div>
+
+    {{-- End of View Program Modal --}}
 
 </div>

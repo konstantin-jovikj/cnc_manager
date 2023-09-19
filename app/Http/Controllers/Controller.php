@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Program;
+use App\Models\UsedTool;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
@@ -23,5 +25,12 @@ class Controller extends BaseController
     public function home()
     {
         return view('pages.home');
+    }
+
+    public function view(Program $program)
+    {
+        $program = Program::with('tools')->where('id', $program->id)->get();
+        // dd($program);
+        return view('pages.view-program', compact('program'));
     }
 }

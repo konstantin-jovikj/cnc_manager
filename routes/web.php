@@ -22,5 +22,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/programs', [Controller::class, 'programs'])->name('programs');
 Route::get('/tools', [Controller::class, 'tools'])->name('tools');
 Route::get('/', [Controller::class, 'home'])->name('home');
+Route::get('view/program/{program}',[Controller::class, 'view'])->name('view.program');
 
-Route::get('/edit/tool/{tool}',[ToolController::class, 'edit'])->name('edit.tool');
+// Route::get('/edit/tool/{tool}',[ToolController::class, 'edit'])->name('edit.tool');
