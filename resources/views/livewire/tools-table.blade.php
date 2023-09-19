@@ -6,52 +6,36 @@
     </div>
     <div class="row ">
         <div class="col my-auto">
-            {{-- <div class="mb-4">
-                <label for="perPage">Per Page</label>
-                <select
-                    wire:model.live='perPage'
-                    class="" name="perPage" id="perPage">
-                    <option value="5">5</option>
-                    <option value="8">8</option>
-                    <option value="10">10</option>
-                    <option value="12">12</option>
-                    <option value="15">15</option>
-                </select>
-            </div> --}}
-            <div class="form-floating mb-3">
-                <input wire:model.live.debounce.300ms="search" type="text" id="searchTools" class="form-control"
+
+            <div class="form-floating my-4">
+                <input wire:model.live.debounce.300ms="search" type="text" id="searchTools" class="form-control form-control-sm rounded-pill"
                     placeholder="Search Tools">
-                <label for="searchTools">Search Tools</label>
+                <label class="ms-4" for="searchTools">Search Tools</label>
             </div>
             <table class="table table-hover table-bordered border-primary">
                 <thead class="table-primary">
                     <tr>
-                        {{-- <th scope="col">#</th> --}}
+
                         <th scope="col">Position</th>
                         <th scope="col">Station</th>
                         <th scope="col">Shape</th>
                         <th scope="col">Dimension (mm)</th>
-                        {{-- <th scope="col">Drawing</th> --}}
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($tools as $tool)
                         <tr>
-                            {{-- <th scope="row">{{ $loop->iteration }}</th> --}}
                             <td>{{ $tool->position }}</td>
                             <td>{{ $tool->station }}</td>
                             <td>{{ $tool->shape }}</td>
                             <td>{{ $tool->dimension }}</td>
                             <td>
-                                {{-- <button wire:click="view({{ $tool->id }})" class="btn btn-success btn-sm"
-                                    href="">View</button> --}}
 
                                 <button wire:click="edit({{ $tool->id }})" class="btn btn-warning btn-sm">View /
                                     Edit</button>
                                 <button wire:click="OpenDeleteConfirmation({{ $tool->id }})"
                                     class="btn btn-danger btn-sm">Delete</button>
-                                {{-- <a href="{{ route('edit.tool', $tool->id) }}" class="btn btn-warning btn-sm">Edit</a> --}}
                             </td>
                         </tr>
                     @endforeach

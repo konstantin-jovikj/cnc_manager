@@ -10,8 +10,15 @@ class Program extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'program',
+        'note',
+    ];
+
     public function tools()
     {
         return $this->belongsToMany(Tool::class, 'used_tools', 'program_id', 'tool_id');
     }
+
 }
