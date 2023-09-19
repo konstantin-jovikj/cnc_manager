@@ -13,7 +13,7 @@ class ProgramsTable extends Component
 
     public $search = '';
     public $isOpenNewProgram = 0;
-    public $isViewOpen = 0;
+    public $isEditOpen = 0;
     public $tools;
     public $toolUsed = [];
     public $name = '';
@@ -21,8 +21,14 @@ class ProgramsTable extends Component
     public $note = '';
     public $programs;
     public $newUsedTool;
-    public $viewProgramName;
-    public $viewProgramCode;
+
+    public $editName;
+    public $editProgram;
+    public $editNote;
+
+    public $usedTools = [];
+    public $toolUsedEdit = [];
+
 
     public function OpenNewProgramModul()
     {
@@ -34,19 +40,22 @@ class ProgramsTable extends Component
         $this->isOpenNewProgram = false;
     }
 
-    public function openViewProgramModul($id)
+    public function openEditModal($id)
     {
-        $program = Program::findOrFail($id);
-        $this->viewProgramName = $program->name;
-        $this->viewProgramCode = $program->program;
-        $this->isViewOpen = true;
+        $editProgram = Program::findOrFail($id);
+        $toolUsedEdit = UsedTool::where('program_id', $id)->get();
+        $this->editName = $editProgram->name;
+        $this->editProgram = $editProgram->program;
+        $this->editNote = $editProgram->note;
+        $this->usedTools = $toolUsedEdit;
+        // dd($this->usedTools);
+        $this->isEditOpen = true;
     }
 
-    public function closeViewProgramModul()
+    public function closeEditModal()
     {
-        $this->isViewOpen = false;
+        $this->isEditOpen = false;
     }
-
 
     public function getTools()
     {
@@ -57,6 +66,10 @@ class ProgramsTable extends Component
     public function mount()
     {
         $this->getTools();
+        $this->editName;
+        $this->editProgram;
+        $this->editNote;
+        $this->usedTools;
     }
 
     public function saveProgram()
@@ -105,6 +118,8 @@ class ProgramsTable extends Component
             $this->programs = Program::where('name', 'like', '%'.$this->search.'%')
                                         ->orWhere('note', 'like', '%'.$this->search.'%')->get();
         }
-        return view('livewire.programs-table');
+        return view('livewire.programs-table',[
+            'usedTools' => $this->usedTools
+        ]);
     }
 }

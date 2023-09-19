@@ -32,20 +32,22 @@
                 </thead>
                 <tbody>
                     @foreach ($programs as $program)
-                    <tr>
-                        <th scope="row">{{ $loop->iteration }}</th>
-                        <td>{{$program->name}}</td>
-                        <td>{{$program->note}}</td>
-                        <td>{{$program->created_at}}</td>
-                        <td>{{$program->updated_at}}</td>
-                        <td>
-                            {{-- <button wire:click='openViewProgramModul({{$program->id}})' class="btn btn-success btn-sm">View</button> --}}
-                            <a href="{{route('view.program', $program->id)}}" class="btn btn-success btn-sm">View</a>
+                        <tr>
+                            <th scope="row">{{ $loop->iteration }}</th>
+                            <td>{{ $program->name }}</td>
+                            <td>{{ $program->note }}</td>
+                            <td>{{ $program->created_at }}</td>
+                            <td>{{ $program->updated_at }}</td>
+                            <td>
+                                {{-- <button wire:click='openViewProgramModul({{$program->id}})' class="btn btn-success btn-sm">View</button> --}}
+                                <a href="{{ route('view.program', $program->id) }}"
+                                    class="btn btn-success btn-sm">View</a>
 
-                            <button class="btn btn-warning btn-sm">Edit</button>
-                            <button class="btn btn-danger btn-sm">Delete</button>
-                        </td>
-                    </tr>
+                                <button wire:click='openEditModal({{ $program->id }})'
+                                    class="btn btn-warning btn-sm">Edit</button>
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -78,12 +80,15 @@
                                         <label for="name" class="form-label">Program Name</label>
                                         <input wire:model='name' type="text" class="form-control" id="name">
                                         <div class="row mt-2">
-                                            @foreach ( $tools as $tool )
-                                            <div class="col-3">
-                                                    <input wire:model='toolUsed' type="checkbox" class="btn-check bg-primary" id="btn-check-{{$tool->id}}"
-                                                    autocomplete="off" value="{{$tool->id}}">
-                                                    <label class="btn btn-sm btn-outline-dark w-100 m-1" for="btn-check-{{$tool->id}}">{{ $tool->position}} - {{$tool->dimension}}</label>
-                                            </div>
+                                            @foreach ($tools as $tool)
+                                                <div class="col-3">
+                                                    <input wire:model='toolUsed' type="checkbox"
+                                                        class="btn-check " id="btn-check-{{ $tool->id }}"
+                                                        autocomplete="off" value="{{ $tool->id }}">
+                                                    <label class="btn btn-sm btn-outline-dark w-100 m-1"
+                                                        for="btn-check-{{ $tool->id }}">{{ $tool->position }} -
+                                                        {{ $tool->dimension }}</label>
+                                                </div>
                                             @endforeach
                                         </div>
                                         <div class="row">
@@ -113,33 +118,52 @@
     {{-- End of New Program Modal --}}
 
 
-
-      {{-- View Program Modal --}}
-      <div>
-        @if ($isViewOpen)
+    {{-- Edit Program Modal --}}
+    <div>
+        @if ($isEditOpen)
             <div class="modal show" tabindex="-1" role="dialog" style="display: block;">
-                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">View Program</h1>
-                            <button wire:click='closeViewProgramModul' type="button" class="btn-close"
-                                data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Program</h1>
+                            <button wire:click='closeEditModal' type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form wire:submit='saveProgram'>
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="mb-3">
-                                            {{$viewProgramCode}}
+
+                                            <label for="editProgram" class="form-label">Program</label>
+                                            <textarea wire:model='editProgram' class="form-control text-uppercase font-monospace fw-bold" id="programEdit"
+                                                rows="28">{{ $editProgram }}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-8">
-                                            <h4>{{$viewProgramName}}</h4>
+                                        <label for="editName" class="form-label">Program Name</label>
+                                        <input wire:model='editName' type="text" class="form-control"
+                                            id="EditName" value="{{ $editName }}">
+                                        <div class="row mt-2">
+                                            @foreach ($tools as $tool)
+                                                <div class="col-3">
+                                                    <input wire:model='usedTools' type="checkbox"
+                                                        class="btn-check bg-primary"
+                                                        id="btn-check-edit-{{ $tool->id }}" autocomplete="off"
+                                                        value="{{ $tool->id }}"
+                                                        {{ in_array($tool->id, $usedTools->pluck('tool_id')->toArray()) ? 'checked' : '' }}>
+                                                    <label class="btn btn-sm
+                                                    {{ in_array($tool->id, $usedTools->pluck('tool_id')->toArray()) ? 'btn-dark' : 'btn-outline-dark' }} w-100 m-1"
+                                                        for="btn-check-edit-{{ $tool->id }}">{{ $tool->position }}
+                                                        - {{ $tool->dimension }}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="mb-3">
-                                                    <label for="note" class="form-label">Notes</label>
-                                                    <textarea wire:model='note' class="form-control " id="note" rows="8"></textarea>
+                                                    <label for="editNote" class="form-label">Notes</label>
+                                                    <textarea wire:model='editNote' class="form-control " id="noteEdit" rows="8">{{ $editNote }}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -148,7 +172,7 @@
                                 </div>
 
 
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </form>
                         </div>
 
@@ -159,6 +183,9 @@
         @endif
     </div>
 
-    {{-- End of View Program Modal --}}
+    {{-- End of Edit Program Modal --}}
+
+
+
 
 </div>
