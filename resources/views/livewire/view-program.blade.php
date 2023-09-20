@@ -38,9 +38,11 @@
                         <div class="card-header">Used Tools</div>
 
                         <div class="card-body text-dark h6">
-                            @foreach ($program[0]->tools as $tool)
-                                <ul id="tools">{{ $tool->position }} - {{ $tool->dimension }} - {{$tool->shape}}</ul>
-                            @endforeach
+                            <ul>
+                                @foreach ($program[0]->tools as $tool)
+                                <li id="tools">{{ $tool->position }} - {{ $tool->dimension }} - {{$tool->shape}} - {{$tool->station}}-Statiion</li>
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
             </div>
