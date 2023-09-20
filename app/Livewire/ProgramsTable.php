@@ -179,10 +179,10 @@ class ProgramsTable extends Component
     public function delete($id)
     {
         // dd($id);
+        $this->closeDeleteModal();
         Program::findOrFail($id)->delete();
         UsedTool::where('program_id', $id)->delete();
         session()->flash('success', 'Program is successfully deleted');
-        $this->closeDeleteModal();
         $this->reset(['editName', 'editProgram', 'editNote', 'usedTools']);
 
     }

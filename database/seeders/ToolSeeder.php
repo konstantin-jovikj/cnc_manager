@@ -39,7 +39,7 @@ class ToolSeeder extends Seeder
                 'position' => 'T04',
                 'station' => 'A',
                 'shape' => 'Round',
-                'dimension' => 'Ф5.5',
+                'dimension' => 'Ф3.5',
                 'tool_drawing' => '3.jpg'
             ],
             [
