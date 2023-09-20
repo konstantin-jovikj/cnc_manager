@@ -4,8 +4,9 @@ namespace App\Livewire;
 
 use App\Models\Tool;
 use App\Models\Program;
-use App\Models\UsedTool;
 use Livewire\Component;
+use App\Models\UsedTool;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class ProgramsTable extends Component
@@ -14,6 +15,7 @@ class ProgramsTable extends Component
     public $search = '';
     public $isOpenNewProgram = 0;
     public $isEditOpen = 0;
+    public $isDeleteOpen = 0;
     public $tools;
     public $toolUsed = [];
     public $name = '';
@@ -22,12 +24,18 @@ class ProgramsTable extends Component
     public $programs;
     public $newUsedTool;
 
+    public $programId;
     public $editName;
     public $editProgram;
     public $editNote;
 
     public $usedTools = [];
     public $toolUsedEdit = [];
+    public $usedToolIds = [];
+    public $toolIds = [];
+    public $uniqueToolIds = [];
+    public $seenToolIds = [];
+    public $deleteProgramId;
 
 
     public function OpenNewProgramModul()
@@ -43,6 +51,8 @@ class ProgramsTable extends Component
     public function openEditModal($id)
     {
         $editProgram = Program::findOrFail($id);
+        $this->programId = $id;
+        // dd($this->programId);
         $toolUsedEdit = UsedTool::where('program_id', $id)->get();
         $this->editName = $editProgram->name;
         $this->editProgram = $editProgram->program;
@@ -62,6 +72,17 @@ class ProgramsTable extends Component
         $this->tools = Tool::all();
     }
 
+    public function openDeleteModal($id)
+    {
+        $this->deleteProgramId = $id;
+        $this->isDeleteOpen = true;
+    }
+
+    public function closeDeleteModal()
+    {
+        $this->isDeleteOpen = false;
+    }
+
 
     public function mount()
     {
@@ -70,6 +91,7 @@ class ProgramsTable extends Component
         $this->editProgram;
         $this->editNote;
         $this->usedTools;
+        // $this->programId;
     }
 
     public function saveProgram()
@@ -98,15 +120,70 @@ class ProgramsTable extends Component
             }
         }
 
-
         session()->flash('success', 'New Program saved successfully.');
         $this->CloseNewProgramModul();
         $this->reset('name', 'program', 'note');
     }
 
 
-    public function viewProgram($id)
+
+    public function update($programId)
     {
+        $updateProgram = Program::findOrFail($programId);
+
+        // Update the program fields
+        $updateProgram->update([
+            'name' => $this->editName,
+            'program' => $this->editProgram,
+            'note' => $this->editNote
+        ]);
+
+        foreach ($this->usedTools as $item) {
+            if (is_object($item) && isset($item->tool_id)) {
+                $toolId = $item->tool_id;
+            } elseif (is_string($item)) {
+                $toolId = intval($item);
+            }
+
+            // Check if $toolId has been seen before
+            if (isset($seenToolIds[$toolId])) {
+                // If seen before, unset it from $uniqueToolIds
+                unset($uniqueToolIds[$seenToolIds[$toolId]]);
+                unset($uniqueToolIds[$toolId]);
+            } else {
+                // Otherwise, add it to both arrays
+                $uniqueToolIds[] = $toolId;
+                $seenToolIds[$toolId] = count($uniqueToolIds) - 1;
+            }
+        }
+
+        $this->toolIds = array_values($uniqueToolIds);
+        UsedTool::where('program_id', $programId)->delete();
+
+        // Check if any tools are selected before creating new associations
+        if (!empty($this->toolIds)) {
+
+            foreach ($this->toolIds as $toolId) {
+                UsedTool::create([
+                    'tool_id' => $toolId,
+                    'program_id' => $programId
+                ]);
+            }
+        }
+
+        session()->flash('success', 'Program is successfully updated');
+        $this->closeEditModal();
+        $this->reset(['editName', 'editProgram', 'editNote', 'usedTools']);
+    }
+
+    public function delete($id)
+    {
+        // dd($id);
+        Program::findOrFail($id)->delete();
+        UsedTool::where('program_id', $id)->delete();
+        session()->flash('success', 'Program is successfully deleted');
+        $this->closeDeleteModal();
+        $this->reset(['editName', 'editProgram', 'editNote', 'usedTools']);
 
     }
 

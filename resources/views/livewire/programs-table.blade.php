@@ -6,6 +6,26 @@
     </div>
     <div class="row ">
         <div class="col my-auto">
+            <div class="row">
+                <div class="col-6 offset-3">
+                    @if (session()->has('success'))
+                        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-header">
+                                    <img src="..." class="rounded me-2" alt="...">
+                                    <strong class="me-auto">Bootstrap</strong>
+                                    <small>11 mins ago</small>
+                                    <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="toast-body">
+                                    {{ session('success') }}
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
             <div class="row mt-4">
                 <div class="col-6">
                     <div class="form-floating mb-3">
@@ -45,7 +65,8 @@
 
                                 <button wire:click='openEditModal({{ $program->id }})'
                                     class="btn btn-warning btn-sm">Edit</button>
-                                <button class="btn btn-danger btn-sm">Delete</button>
+                                <button wire:click='openDeleteModal({{ $program->id }})'
+                                    class="btn btn-danger btn-sm">Delete</button>
                             </td>
                         </tr>
                     @endforeach
@@ -82,9 +103,9 @@
                                         <div class="row mt-2">
                                             @foreach ($tools as $tool)
                                                 <div class="col-3">
-                                                    <input wire:model='toolUsed' type="checkbox"
-                                                        class="btn-check " id="btn-check-{{ $tool->id }}"
-                                                        autocomplete="off" value="{{ $tool->id }}">
+                                                    <input wire:model='toolUsed' type="checkbox" class="btn-check "
+                                                        id="btn-check-{{ $tool->id }}" autocomplete="off"
+                                                        value="{{ $tool->id }}">
                                                     <label class="btn btn-sm btn-outline-dark w-100 m-1"
                                                         for="btn-check-{{ $tool->id }}">{{ $tool->position }} -
                                                         {{ $tool->dimension }}</label>
@@ -126,11 +147,11 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Program</h1>
-                            <button wire:click='closeEditModal' type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button wire:click='closeEditModal' type="button" class="btn-close"
+                                data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form wire:submit='saveProgram'>
+                            <form wire:submit='update({{ $programId }})'>
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="mb-3">
@@ -151,11 +172,13 @@
                                                         class="btn-check bg-primary"
                                                         id="btn-check-edit-{{ $tool->id }}" autocomplete="off"
                                                         value="{{ $tool->id }}"
-                                                        {{ in_array($tool->id, $usedTools->pluck('tool_id')->toArray()) ? 'checked' : '' }}>
-                                                    <label class="btn btn-sm
-                                                    {{ in_array($tool->id, $usedTools->pluck('tool_id')->toArray()) ? 'btn-dark' : 'btn-outline-dark' }} w-100 m-1"
-                                                        for="btn-check-edit-{{ $tool->id }}">{{ $tool->position }}
-                                                        - {{ $tool->dimension }}</label>
+                                                        {{ $usedTools->contains('tool_id', $tool->id) ? 'checked' : '' }}>
+                                                    <label
+                                                        class="btn btn-sm
+                                                    {{ $usedTools->contains('tool_id', $tool->id) ? 'btn-dark' : 'btn-outline-dark' }} w-100 m-1"
+                                                        for="btn-check-edit-{{ $tool->id }}">
+                                                        {{ $tool->position }} - {{ $tool->dimension }}
+                                                    </label>
                                                 </div>
                                             @endforeach
                                         </div>
@@ -186,6 +209,40 @@
     {{-- End of Edit Program Modal --}}
 
 
+    {{-- Delete MODAL  --}}
+    <div>
 
+        @if ($isDeleteOpen)
+            <div class="modal show" tabindex="-1" role="dialog" style="display: block;">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary-subtle text-dark">
+                            <h5 class="modal-title">
+                                Do you realy want to delete this Program?
+                            </h5>
+                            <button wire:click="closeDeleteModal" type="button" class="btn-close"
+                                data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button wire:click='delete({{ $deleteProgramId }})'
+                                        class="btn btn-danger w-100 h-100">Yes, Delete the Program</button>
+                                </div>
+                                <div class="col-6">
+                                    <button wire:click="closeDeleteModal" class="btn btn-secondary w-100 h-100">No,
+                                        Do not delete the Program</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+    @endif
+</div>
+{{-- Edit MODAL  --}}
 
 </div>
