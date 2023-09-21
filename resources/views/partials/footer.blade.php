@@ -8,5 +8,6 @@
     });
 </script>
     @livewireScripts
+    @livewireChartsScripts
 </body>
 </html>
