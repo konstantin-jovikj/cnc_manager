@@ -18,7 +18,6 @@
                             <th scope="col" class="w-50">Note</th>
                             <th scope="col" class="w-25">Creation date</th>
                             <th scope="col" class="w-25">Last Update</th>
-                            <th scope="col" class="d-print-none">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="" style="font-size: 13px">
@@ -33,10 +32,6 @@
                                     <td>{{ $note->note }}</td>
                                     <td>{{ $note->created_at }}</td>
                                     <td>{{ $note->updated_at }}</td>
-                                    <td class="d-print-none">
-                                        <button wire:click='openEditModal({{ $note->id }})' class="btn btn-warning btn-sm">Edit</button>
-                                        <button wire:click='openDeleteModal({{ $note->id }})' class="btn btn-danger btn-sm">Delete</button>
-                                    </td>
                                 </tr>
                             @endforeach
                         @endif
@@ -67,6 +62,16 @@
                                 @foreach ($program[0]->tools as $tool)
                                 <li id="tools">{{ $tool->position }} - {{ $tool->dimension }} - {{$tool->shape}} - {{$tool->station}}-Statiion</li>
                                 @endforeach
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card border-info mb-3">
+                        <div class="card-header" >Sheet Metal Dimension</div>
+
+                        <div class="card-body text-dark" style="font-size: 13px">
+                            <ul>
+                                <li >{{$program[0]->dimension}}</li>
                             </ul>
                         </div>
                     </div>

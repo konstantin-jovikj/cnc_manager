@@ -85,10 +85,20 @@
                                             <label for="program" class="form-label">Program</label>
                                             <textarea wire:model='program' class="form-control text-uppercase font-monospace fw-bold" id="program" rows="28"></textarea>
                                         </div>
+
                                     </div>
-                                    <div class="col-8">
-                                        <label for="name" class="form-label">Program Name</label>
-                                        <input wire:model='name' type="text" class="form-control" id="name">
+                                    <div class="col-8 pe-5">
+                                        <div class="row">
+                                            <div class="col-12 ">
+                                                <label for="name" class="form-label">Program Name</label>
+                                                <input wire:model='name' type="text" class="form-control" id="name">
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="dimension" class="form-label">Sheet Metal Dimension</label>
+                                                <input wire:model='dimension' type="text" class="form-control" id="dimension">
+                                            </div>
+                                        </div>
+
                                         <div class="row mt-2">
                                             @foreach ($tools as $tool)
                                                 <div class="col-3">
@@ -152,9 +162,22 @@
                                         </div>
                                     </div>
                                     <div class="col-8">
-                                        <label for="editName" class="form-label">Program Name</label>
-                                        <input wire:model='editName' type="text" class="form-control"
-                                            id="EditName" value="{{ $editName }}">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="editName" class="form-label">Program Name</label>
+                                                <input wire:model='editName' type="text" class="form-control"
+                                                id="EditName" value="{{ $editName }}">
+                                            </div>
+
+                                            <div class="col-12">
+
+                                                <label for="editDimension" class="form-label">Sheet Metal Dimension</label>
+                                                <input wire:model='editDimension' type="text" class="form-control"
+                                                id="editDimension" value="{{ $editDimension }}">
+                                            </div>
+
+
+                                        </div>
                                         <div class="row mt-2">
                                             @foreach ($tools as $tool)
                                                 <div class="col-3">

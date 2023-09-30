@@ -14,7 +14,7 @@ class Program extends Model
     protected $fillable = [
         'name',
         'program',
-        // 'note',
+        'dimension',
     ];
 
     public function tools()

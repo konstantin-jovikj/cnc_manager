@@ -24,11 +24,13 @@ class ProgramsTable extends Component
     public $note = '';
     public $programs;
     public $newUsedTool;
+    public $dimension = '';
 
     public $programId;
     public $noteId;
     public $editName;
     public $editProgram;
+    public $editDimension;
     public $editNotes = [];
 
     public $usedTools = [];
@@ -92,6 +94,7 @@ class ProgramsTable extends Component
         $toolUsedEdit = UsedTool::where('program_id', $id)->get();
         $this->editName = $editProgram->name;
         $this->editProgram = $editProgram->program;
+        $this->editDimension = $editProgram->dimension;
 
         $programNotes = Note::where('program_id', $id)->get();
 
@@ -130,6 +133,7 @@ class ProgramsTable extends Component
         $this->editProgram;
         $this->editNotes;
         $this->usedTools;
+
         // $this->programId;
     }
 
@@ -138,7 +142,7 @@ class ProgramsTable extends Component
         $program = Program::create([
             'name' => $this->name,
             'program' => $this->program,
-            // 'note' => $this->note
+            'dimension' => $this->dimension
         ]);
 
         $program->save();
@@ -171,7 +175,7 @@ class ProgramsTable extends Component
 
         session()->flash('success', 'New Program saved successfully.');
         $this->CloseNewProgramModul();
-        $this->reset('name', 'program', 'note');
+        $this->reset('name', 'program', 'note', 'dimension');
     }
 
 
@@ -184,7 +188,7 @@ class ProgramsTable extends Component
         $updateProgram->update([
             'name' => $this->editName,
             'program' => $this->editProgram,
-            // 'note' => $this->editNote
+            'dimension' => $this->editDimension
         ]);
 
         foreach ($this->usedTools as $item) {
@@ -232,7 +236,7 @@ class ProgramsTable extends Component
         Program::findOrFail($id)->delete();
         UsedTool::where('program_id', $id)->delete();
         session()->flash('success', 'Program is successfully deleted');
-        $this->reset(['editName', 'editProgram', 'usedTools']);
+        $this->reset(['editName', 'editProgram', 'usedTools', 'editDimension']);
 
     }
 
