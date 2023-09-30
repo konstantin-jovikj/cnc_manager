@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Note;
 use App\Models\Program;
 use App\Models\UsedTool;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
@@ -29,7 +30,7 @@ class Controller extends BaseController
 
     public function view(Program $program)
     {
-        $program = Program::with('tools')->where('id', $program->id)->get();
+        $program = Program::with('tools', 'notes')->where('id', $program->id)->get();
         // dd($program);
         return view('pages.view-program', compact('program'));
     }

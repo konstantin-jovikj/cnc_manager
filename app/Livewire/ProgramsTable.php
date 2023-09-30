@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Note;
 use App\Models\Tool;
 use App\Models\Program;
 use Livewire\Component;
@@ -25,9 +26,10 @@ class ProgramsTable extends Component
     public $newUsedTool;
 
     public $programId;
+    public $noteId;
     public $editName;
     public $editProgram;
-    public $editNote;
+    public $editNotes = [];
 
     public $usedTools = [];
     public $toolUsedEdit = [];
@@ -36,6 +38,40 @@ class ProgramsTable extends Component
     public $uniqueToolIds = [];
     public $seenToolIds = [];
     public $deleteProgramId;
+
+
+    public $isEditNoteOpen = 0;
+
+    public function OpenEditNoteNodal($id)
+    {
+        // dd($id);
+        $note = Note::findOrFail($id);
+        $this->noteId = $id;
+        $this->note = $note->note;
+        $this->isEditNoteOpen = true;
+        // dd($note);
+    }
+
+
+    public function updateNote($noteId)
+    {
+        // dd($noteId);
+        $updateNote = Note::findOrFail($noteId);
+        // Update the note field
+        $updateNote->update([
+            'note' => $this->note,
+        ]);
+
+        session()->flash('success', 'Note is successfully updated');
+        $this->reset(['note']);
+        $this->CloseEditNoteModal();
+        $this->openEditModal($this->programId);
+    }
+
+    public function CloseEditNoteModal()
+    {
+        $this->isEditNoteOpen = false;
+    }
 
 
     public function OpenNewProgramModul()
@@ -52,13 +88,16 @@ class ProgramsTable extends Component
     {
         $editProgram = Program::findOrFail($id);
         $this->programId = $id;
-        // dd($this->programId);
+
         $toolUsedEdit = UsedTool::where('program_id', $id)->get();
         $this->editName = $editProgram->name;
         $this->editProgram = $editProgram->program;
-        $this->editNote = $editProgram->note;
+
+        $programNotes = Note::where('program_id', $id)->get();
+
+        $this->editNotes = $programNotes;
         $this->usedTools = $toolUsedEdit;
-        // dd($this->usedTools);
+
         $this->isEditOpen = true;
     }
 
@@ -89,7 +128,7 @@ class ProgramsTable extends Component
         $this->getTools();
         $this->editName;
         $this->editProgram;
-        $this->editNote;
+        $this->editNotes;
         $this->usedTools;
         // $this->programId;
     }
@@ -99,12 +138,21 @@ class ProgramsTable extends Component
         $program = Program::create([
             'name' => $this->name,
             'program' => $this->program,
-            'note' => $this->note
+            // 'note' => $this->note
         ]);
 
         $program->save();
 
-        $lastRow = DB::table('programs')->get()->last();
+        // $lastRow = DB::table('programs')->get()->last();
+        $lastRow = $program->id;
+
+        $note = Note::create([
+            'program_id' => $lastRow,
+            'note' => $this->note
+        ]);
+
+        $note->save();
+
         $nrOfTools = 0;
 
         if ($this->toolUsed != NULL){
@@ -114,11 +162,12 @@ class ProgramsTable extends Component
             for($i==0;$i<$nrOfTools; $i++){
                 $newUsedTool = UsedTool::create([
                     'tool_id' => $this->toolUsed[$i],
-                    'program_id' => $lastRow->id
+                    'program_id' => $lastRow
                 ]);
                 $newUsedTool->save();
             }
         }
+
 
         session()->flash('success', 'New Program saved successfully.');
         $this->CloseNewProgramModul();
@@ -135,7 +184,7 @@ class ProgramsTable extends Component
         $updateProgram->update([
             'name' => $this->editName,
             'program' => $this->editProgram,
-            'note' => $this->editNote
+            // 'note' => $this->editNote
         ]);
 
         foreach ($this->usedTools as $item) {
@@ -173,7 +222,7 @@ class ProgramsTable extends Component
 
         session()->flash('success', 'Program is successfully updated');
         $this->closeEditModal();
-        $this->reset(['editName', 'editProgram', 'editNote', 'usedTools']);
+        $this->reset(['editName', 'editProgram', 'usedTools']);
     }
 
     public function delete($id)
@@ -183,17 +232,43 @@ class ProgramsTable extends Component
         Program::findOrFail($id)->delete();
         UsedTool::where('program_id', $id)->delete();
         session()->flash('success', 'Program is successfully deleted');
-        $this->reset(['editName', 'editProgram', 'editNote', 'usedTools']);
+        $this->reset(['editName', 'editProgram', 'usedTools']);
 
     }
+
+
+    public function addNote($id)
+    {
+        $note = Note::create([
+            'program_id' => $id,
+            'note' => $this->note,
+        ]);
+
+        $note->save();
+        $this->reset('note');
+        $this->closeEditModal();
+        $this->openEditModal($id);
+
+    }
+
+    public function deleteNote($id)
+    {
+        Note::where('id', $id)->delete();
+        // $this->closeEditModal();
+        // $this->mount();
+        session()->flash('success', 'Note is successfully deleted');
+        return redirect()->route('programs');
+
+    }
+
+
 
     public function render()
     {
         if(! $this->search){
             $this->programs = Program::all();
         }else{
-            $this->programs = Program::where('name', 'like', '%'.$this->search.'%')
-                                        ->orWhere('note', 'like', '%'.$this->search.'%')->get();
+            $this->programs = Program::where('name', 'like', '%'.$this->search.'%')->get();
         }
         return view('livewire.programs-table',[
             'usedTools' => $this->usedTools

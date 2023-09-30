@@ -11,12 +11,37 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="card border-info mb-3">
-                    <div class="card-header">Notes</div>
-                    <div class="card-body text-dark h5" id="note">
-                        {{ $program[0]->note }}
-                    </div>
-                </div>
+                <table class="table table-hover table-bordered border-info">
+                    <thead class="card-body text-dark h6 table-secondary border-info">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" class="w-50">Note</th>
+                            <th scope="col" class="w-25">Creation date</th>
+                            <th scope="col" class="w-25">Last Update</th>
+                            <th scope="col" class="d-print-none">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="" style="font-size: 13px">
+                        @if ($program[0]->notes->isEmpty())
+                            <tr>
+                                <td colspan="5">This program does not have any notes</td>
+                            </tr>
+                        @else
+                            @foreach ($program[0]->notes as $note)
+                                <tr>
+                                    <th scope="row">{{ $loop->iteration }}</th>
+                                    <td>{{ $note->note }}</td>
+                                    <td>{{ $note->created_at }}</td>
+                                    <td>{{ $note->updated_at }}</td>
+                                    <td class="d-print-none">
+                                        <button wire:click='openEditModal({{ $note->id }})' class="btn btn-warning btn-sm">Edit</button>
+                                        <button wire:click='openDeleteModal({{ $note->id }})' class="btn btn-danger btn-sm">Delete</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="row">
@@ -35,9 +60,9 @@
 
 
                     <div class="card border-info mb-3">
-                        <div class="card-header">Used Tools</div>
+                        <div class="card-header" >Used Tools</div>
 
-                        <div class="card-body text-dark h6">
+                        <div class="card-body text-dark" style="font-size: 13px">
                             <ul>
                                 @foreach ($program[0]->tools as $tool)
                                 <li id="tools">{{ $tool->position }} - {{ $tool->dimension }} - {{$tool->shape}} - {{$tool->station}}-Statiion</li>
