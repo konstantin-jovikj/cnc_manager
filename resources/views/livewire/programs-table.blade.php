@@ -6,11 +6,11 @@
     </div>
     <div class="row ">
         <div class="col my-auto">
-            <div class="row">
-                <div class="col-12">
-                    @if (session('status'))
+            <div class="row my-4">
+                <div class="col-6 offset-3">
+                    @if (session('success'))
                         <div class="alert alert-success">
-                            {{ session('status') }}
+                            {{ session('success') }}
                         </div>
                     @endif
                 </div>

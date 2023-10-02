@@ -9,9 +9,12 @@ use Livewire\Component;
 use App\Models\UsedTool;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use WireUi\Traits\Actions;
 
 class ProgramsTable extends Component
 {
+
+    use Actions;
 
     public $search = '';
     public $isOpenNewProgram = 0;
@@ -147,7 +150,6 @@ class ProgramsTable extends Component
 
         $program->save();
 
-        // $lastRow = DB::table('programs')->get()->last();
         $lastRow = $program->id;
 
         $note = Note::create([
@@ -235,7 +237,8 @@ class ProgramsTable extends Component
         $this->closeDeleteModal();
         Program::findOrFail($id)->delete();
         UsedTool::where('program_id', $id)->delete();
-        session()->flash('success', 'Program is successfully deleted');
+        // session()->flash('success', 'Program is successfully deleted');
+        $this->notification()->success('Deleted');
         $this->reset(['editName', 'editProgram', 'usedTools', 'editDimension']);
 
     }

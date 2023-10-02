@@ -9,6 +9,8 @@
     {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
     <title>CNC Manager</title>
     @livewireStyles
+    <wireui:scripts />
+    <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 <body>
 @include('partials.navbar')
