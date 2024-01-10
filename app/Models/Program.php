@@ -15,6 +15,8 @@ class Program extends Model
         'name',
         'program',
         'dimension',
+        'created_at',
+        'updated_at'
     ];
 
     public function tools()

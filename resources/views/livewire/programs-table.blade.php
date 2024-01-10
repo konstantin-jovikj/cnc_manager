@@ -17,50 +17,18 @@
             </div>
             <div class="row mt-4">
                 <div class="col-6">
-                    <div class="form-floating mb-3">
+                    {{-- <div class="form-floating mb-3">
                         <input wire:model.live.debounce.100ms="search" type="text"
                             class="form-control form-control-sm rounded-pill" placeholder="Search Programs">
                         <label class="ms-4" for="searchPrograms">Search Programs</label>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="col-6 d-flex align-items-center justify-content-end">
                     <button wire:click='OpenNewProgramModul' class="btn btn-primary">Add new Program</button>
                 </div>
             </div>
 
-            <table class="table table-hover table-bordered border-primary">
-                <thead class="table-primary">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Program Name</th>
-                        {{-- <th scope="col">Note</th> --}}
-                        <th scope="col">Creation date</th>
-                        <th scope="col">Last Update</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($programs as $program)
-                        <tr>
-                            <th scope="row">{{ $loop->iteration }}</th>
-                            <td>{{ $program->name }}</td>
-                            {{-- <td>{{ $program->note }}</td> --}}
-                            <td>{{ $program->created_at }}</td>
-                            <td>{{ $program->updated_at }}</td>
-                            <td>
-                                {{-- <button wire:click='openViewProgramModul({{$program->id}})' class="btn btn-success btn-sm">View</button> --}}
-                                <a href="{{ route('view.program', $program->id) }}"
-                                    class="btn btn-success btn-sm">View</a>
-
-                                <button wire:click='openEditModal({{ $program->id }})'
-                                    class="btn btn-warning btn-sm">Edit</button>
-                                <button wire:click='openDeleteModal({{ $program->id }})'
-                                    class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <livewire:programs/>
 
         </div>
     </div>
