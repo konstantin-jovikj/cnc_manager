@@ -84,37 +84,32 @@ final class Programs extends PowerGridComponent
             /** Example of custom column using a closure **/
             ->addColumn('name_lower', fn (Program $model) => strtolower(e($model->name)))
 
-            // ->addColumn('program')
             ->addColumn('dimension')
             ->addColumn('created_at_formatted', fn (Program $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
             ->addColumn('updated_at_formatted', fn (Program $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
-        // ->addColumn('created_at_formatted', fn (Program $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
     }
 
     public function columns(): array
     {
         return [
-            Column::make('Id', 'id'),
+            Column::make('Id', 'id')->visibleInExport(true),
             Column::make('Name', 'name')
                 ->sortable()
-                ->searchable(),
-
-            // Column::make('Program', 'program')
-            //     ->sortable()
-            //     ->searchable(),
+                ->searchable()
+                ->visibleInExport(true),
 
             Column::make('Dimension', 'dimension')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->visibleInExport(true),
 
             Column::make('Created at', 'created_at_formatted', 'created_at')
-                ->sortable(),
+                ->sortable()
+                ->visibleInExport(true),
 
             Column::make('Updated at', 'updated_at_formatted', 'updated_at')
-                ->sortable(),
-
-            // Column::make('Created at', 'created_at_formatted', 'created_at')
-            //     ->sortable(),
+                ->sortable()
+                ->visibleInExport(true),
 
             Column::action('Action')
         ];
@@ -127,7 +122,6 @@ final class Programs extends PowerGridComponent
             Filter::inputText('dimension')->operators(['contains']),
             Filter::datetimepicker('created_at'),
             Filter::datetimepicker('updated_at'),
-            // Filter::datetimepicker('created_at'),
         ];
     }
 
@@ -164,28 +158,9 @@ final class Programs extends PowerGridComponent
         return [
             Button::add('edit')
                 ->slot('Edit')
-                ->class('btn btn-warning')
-                ->dispatch('openEditModal', ['id' => $row->id])
-            // ->openModal('new', []),
-            // ->method('openEditModal', ['program' => $row->id])
-            // ->dispatch('openEditModal', ['rowId' => $row->id])
-
-            // Button::add('destroy')
-            //     ->slot('Delete: '.$row->id)
-            //     ->class('btn btn-outline-danger')
-            //     ->dispatch('destroy', ['rowId' => $row->id])
+                ->class('btn btn-warning btn-small')
+                ->route('edit.program', ['id' => $row->id])
         ];
     }
 
-    /*
-    public function actionRules($row): array
-    {
-       return [
-            // Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($row) => $row->id === 1)
-                ->hide(),
-        ];
-    }
-    */
 }

@@ -24,4 +24,6 @@ Route::get('/tools', [Controller::class, 'tools'])->name('tools');
 Route::get('/', [Controller::class, 'home'])->name('home');
 Route::get('view/program/{program}',[Controller::class, 'view'])->name('view.program');
 
+Route::get('/program/{id}/edit', [Controller::class, 'openEditModal'])->name('edit.program');
+
 // Route::get('/edit/tool/{tool}',[ToolController::class, 'edit'])->name('edit.tool');

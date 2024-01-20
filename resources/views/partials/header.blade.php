@@ -11,7 +11,7 @@
     @livewireStyles
     <wireui:scripts />
     <script src="//unpkg.com/alpinejs" defer></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    {{-- <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script> --}}
 </head>
 <body>
 @include('partials.navbar')
