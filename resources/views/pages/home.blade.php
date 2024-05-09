@@ -8,7 +8,7 @@
         </div>
         <div class="row mt-4">
             <div class="col-6">
-                <livewire:home-chart/>
+                {{-- <livewire:home-chart/> --}}
             </div>
             <div class="col-6">
                 <livewire:program-count/>

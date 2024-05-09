@@ -8,6 +8,6 @@
     });
 </script>
     @livewireScripts
-    @livewireChartsScripts
+    {{-- @livewireChartsScripts --}}
 </body>
 </html>
